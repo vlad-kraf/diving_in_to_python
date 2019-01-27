@@ -1,13 +1,21 @@
-import sys
-digit_string = sys.argv[1]
+"""
+Задача: реализовать класс и метод класса для чтения и вывода текста из файла example.txt.
+Класс должен работать следующим образом:
+reader = FileReader("example.txt")
+print(reader.read())
 
-#digit_string = "873"
+Если файла нет - должен прехватить ошбку IOError и вернуть пустую строку "".
 
-result = 0
+"""
 
-for char in digit_string:
-    digit = int(char)
-    result = result + digit
 
-print(result)
+class FileReader:
+    def __init__(self, file_path=None):
+        self.file_path = file_path
 
+    def read(self):
+        try:
+            f = open(self.file_path, "r")
+            return f.read()
+        except IOError:
+            return ""
