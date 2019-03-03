@@ -52,7 +52,7 @@ for i in range(len(data)):
 print("group_a", sorted(zero_results_a.items()))
 print("group_b", sorted(zero_results_b.items()))
 
-
+ 
 """
 print(data[0])
 print(data[0]['checkin'])
