@@ -1,5 +1,5 @@
 class Matrix:
-    MAX_SIZE = 1000
+    MAX_SIZE = 10
 
     def __init__(self, max_size=None):
         self.max_size = max_size
@@ -8,7 +8,7 @@ class Matrix:
             self.matrix = [None for _ in range(1 * 1)]
         elif max_size <= Matrix.MAX_SIZE:
             self.matrix = [None for _ in range(max_size * max_size)]
-        else:
+        elif max_size > Matrix.MAX_SIZE:
             self.matrix = [None for _ in range(Matrix.MAX_SIZE * Matrix.MAX_SIZE)]
 
     def __str__(self):
