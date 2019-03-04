@@ -1,10 +1,4 @@
-import csv
+import os
 
-csv_filename="cars_week3.csv"
-data=list()
-with open(csv_filename) as csv_fd:
-    reader = csv.reader(csv_fd, delimiter=';')
-    next(reader)  # пропускаем заголовок
-    for row in reader:
-        data.append(row)
-print(data)
+file_ext = os.path.splitext('f1.jpeg')
+print(type(file_ext[1]))
