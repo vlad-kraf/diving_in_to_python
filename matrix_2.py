@@ -2,7 +2,7 @@ class Matrix:
     MAX_SIZE = 1000
 
     def __init__(self, max_size=None):
-        self.max_size = max_size
+        self.max_size = max_size or Matrix.MAX_SIZE
 
         if max_size is None:
             self.matrix = [None for _ in range(1 * 1)]
