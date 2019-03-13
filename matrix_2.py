@@ -3,13 +3,7 @@ class Matrix:
 
     def __init__(self, max_size=None):
         self.max_size = max_size or Matrix.MAX_SIZE
-
-        if max_size is None:
-            self.matrix = [None for _ in range(1 * 1)]
-        elif max_size <= Matrix.MAX_SIZE:
-            self.matrix = [None for _ in range(max_size * max_size)]
-        elif max_size > Matrix.MAX_SIZE:
-            self.matrix = [None for _ in range(Matrix.MAX_SIZE * Matrix.MAX_SIZE)]
+        self.matrix = [None]
 
     def __str__(self):
         """магический метод" _str_ возвращающий строковое представление матрицы - строку, в которой строки матрицы
@@ -70,15 +64,19 @@ class Matrix:
              только пустые элементы, матрицу необходимо "сжать" (уменьшить ее размер на 1) перед тем, как вернуть
              извлекаемое значение
         """
-
-        # определяем размер матрицы
         size = int(len(self.matrix) ** 0.5)
 
         # узнаем индекс последнего "не нулевого" элемента
         if size == 1 and self.matrix[0] is None:
             idx = 1001
         else:
-            idx = (self.matrix.index(None) - 1)
+            for i in self.matrix:
+                if i is not None:
+                    idx = self.matrix.index(i)
+
+        # проверяем нужно ли уменьшать размер матрицы
+        count = (size - 1) ** 2
+        temp_matrix = []
 
         # запоминаем не нулевой элемент
         result = self.matrix[idx]
@@ -86,18 +84,13 @@ class Matrix:
         # заменяем не нулевой элемент на None
         self.matrix[idx] = None
 
+        for i in range(count):
+            temp_matrix.append(self.matrix[i])
 
-        # проверяем нужно ли уменьшать размер матрицы
+        if temp_matrix.count(None) >= size - 1:
+            self.matrix = temp_matrix.copy()
 
-        idx = self.matrix.index(None)
 
-        if idx < (size * (size - 1)):
-            # уменьшаем размер матрицы
-
-            # убираем все лишние None
-            self.matrix = [x for x in self.matrix if x is not None]
-
-            self.matrix.extend([None, ] * ((size - 1) ** 2 - len(self.matrix)))
 
         return result
 
