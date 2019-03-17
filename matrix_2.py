@@ -70,9 +70,7 @@ class Matrix:
         if size == 1 and self.matrix[0] is None:
             idx = 1001
         else:
-            for i in self.matrix:
-                if i is not None:
-                    idx = self.matrix.index(i)
+            idx = self.matrix.index(None) - 1
 
         # определяем размер новой матрицы
         count = (size - 1) ** 2
