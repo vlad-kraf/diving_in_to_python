@@ -74,23 +74,23 @@ class Matrix:
                 if i is not None:
                     idx = self.matrix.index(i)
 
-        # проверяем нужно ли уменьшать размер матрицы
+        # определяем размер новой матрицы
         count = (size - 1) ** 2
-        temp_matrix = []
 
-        # запоминаем не нулевой элемент
+        # запоминаем элемент который нужно извлечь из матрицы и вернуть
         result = self.matrix[idx]
 
-        # заменяем не нулевой элемент на None
+        # извлекаем элемент из матрицы (заменяем на None)
         self.matrix[idx] = None
 
+        # создаем и заполняем уменьшенную матрицу
+        temp_matrix = []
         for i in range(count):
             temp_matrix.append(self.matrix[i])
 
+        # проверяем нужно ли уменьшать размер матрицы и если нужно подменяем рабочую матрицу на уменьшенную
         if temp_matrix.count(None) >= size - 1:
             self.matrix = temp_matrix.copy()
-
-
 
         return result
 
