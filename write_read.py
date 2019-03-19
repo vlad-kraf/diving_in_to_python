@@ -45,6 +45,10 @@ class Notebook(Book):
 
     def __init__(self, title, size, max_sign, content):
         """конструктор"""
+        self.title = title
+        self.size = len(self.content)
+        self.max_sign = max_sign
+        self.content = content
 
     def read(self, page):
         """возвращает страницу с номером page"""
@@ -58,6 +62,7 @@ class Person:
 
     def __init__(self, name):
         """конструктор"""
+        self.name = name
 
     def read(self, book, page):
         """читаем страницу с номером page в книге book"""
