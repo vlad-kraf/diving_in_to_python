@@ -80,7 +80,8 @@ class Notebook(Book):
 
     def write(self, page, text):
         """делает запись текста text на страницу с номером page """
-        self.content[page] = text
+        z = self.content[page]
+        self.content[page] = z + text
 
 
 class Person:
