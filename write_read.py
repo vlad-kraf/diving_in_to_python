@@ -93,20 +93,49 @@ class Person:
 
     def read(self, book, page):
         """читаем страницу с номером page в книге book"""
-        return book.read(page)
+        if page < len(book.content):
+            return book.read(page)
+        else:
+            raise PageNotFoundError
 
     def write(self, book, page, text):
         """пишем на страницу с номером page в книге book"""
-        book.write(page, text)
+        if type(book).__name__ == 'Notebook':
+            if len(text) >= book.max_sign:
+                raise TooLongTextError
+        elif type(book).__name__ == 'Novel':
+            raise PermissionDeniedError
+        else:
+            book.write(page, text)
 
     def set_bookmark(self, book, page):
         """устанавливаем закладку в книгу book на страницу с номером page"""
-        book.set_bookmark(self.name, page)
+        if type(book).__name__ == 'Novel':
+            if 'book' in book.bookmarks.keys():
+                book.set_bookmark(self.name, page)
+            else:
+                raise PageNotFoundError
+        elif type(book).__name__ == 'Notebook':
+            raise NotExistingExtensionError
 
     def get_bookmark(self, book):
         """получаем номер страницы установленной закладки в книге book"""
-        return book.get_bookmark(self.name)
+        if type(book).__name__ == 'Novel':
+            if 'book' in book.bookmarks.keys():
+                return book.get_bookmark(self.name)
+            else:
+                raise PageNotFoundError
+        elif type(book).__name__ == 'Notebook':
+            raise NotExistingExtensionError
 
     def del_bookmark(self, book):
         """удаляет закладку из книги book"""
-        book.del_bookmark(self.name)
+        if type(book).__name__ == 'Novel':
+            if 'book' in book.bookmarks.keys():
+                book.del_bookmark(self.name)
+            else:
+                raise PageNotFoundError
+        elif type(book).__name__ == 'Notebook':
+            raise NotExistingExtensionError
+
+
