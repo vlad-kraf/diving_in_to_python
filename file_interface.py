@@ -22,10 +22,11 @@ class File:
         создаваться в директории, полученной с помощью tempfile.gettempdir.
         Для получения нового пути можно использовать os.path.join."""
 
-        new_path = tempfile.gettempdir() + self.path + second.path
+        new_path = os.path.join(tempfile.gettempdir(), self.path + '.' + second.path)
 
         with open(new_path, 'w') as fp:
             fp.write(self.content + second.content)
+        return new_path
 
 
     def __str__(self):
