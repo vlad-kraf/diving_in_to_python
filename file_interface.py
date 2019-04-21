@@ -4,9 +4,14 @@ import os
 class File:
     def __init__(self, path, content = None):
         self.path = path
-        self.content = content.split('\n')
+        self.content = content
         with open(self.path, 'w'):
             pass
+
+    def __iter__(self):
+        with open(self.path, 'r') as fp:
+            for string in fp:
+                yield string
 
     def write(self, content):
         self.content = content
