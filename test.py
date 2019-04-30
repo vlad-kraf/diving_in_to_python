@@ -1,4 +1,26 @@
-import os
+import collections
+text = 'TABLE OF CONTENT\nJanuary:1\nFebruary:33\n'
+table = collections.OrderedDict()
 
-file_ext = os.path.splitext('f1.jpeg')
-print(type(file_ext[1]))
+words = text.split("\n")
+
+for word in words:
+    temp = word.split(":")
+
+    if len(temp) == 1:
+        value = ''
+        table[temp[0]] = value
+    else:
+        table[temp[0]] = temp[1]
+
+
+
+
+
+for key  in table:
+    if table[key] == '':
+        print(key)
+    else:
+        print(key+":"+table[key])
+
+print(table['sdf'])

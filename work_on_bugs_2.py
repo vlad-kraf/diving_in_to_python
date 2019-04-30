@@ -1,4 +1,6 @@
 import calendar
+import collections
+
 
 class TooLongTextError(Exception):
     pass
@@ -24,7 +26,6 @@ class Page:
         if len(self) + len(other) > self.max_sign:
             raise TooLongTextError
 
-        
         return self + other
 
     def __add__(self, other):
@@ -88,7 +89,6 @@ class Book(object):
     def __setitem__(self, key, value):
         self._content[key-1] = Page(str(value))
 
-
     def __gt__(self, other):
         if len(self._content) > len(other._content):
             return True
@@ -125,11 +125,8 @@ class CalendarBookmark:
     def __set__(self, instance, value):
         self.value = value
 
-    
-
-
-
 # часть 3 --------------------------------------------------------------------------------------------------------------
+
 
 class Person:
     """класс описывающий человека"""
@@ -182,30 +179,66 @@ class AdvancedPerson(Person, Reader, Writer):
 class PageTableContents(Page):
 
     def __init__(self, text=None, max_sign=2000):
-        pass
+        super(PageTableContents, self).__init__(text, max_sign)
+        self._table = collections.OrderedDict()
+
+        if self._text == '':
+            self._table['TABLE OF CONTENT'] = ''
+        else:
+            words = self._text.split("\n")
+
+            for word in words:
+                if word == '':
+                    pass
+                else:
+                    temp = word.split(":")
+
+                    if len(temp) == 1:
+                        value = ''
+                        self._table[temp[0]] = value
+                    else:
+                        self._table[temp[0]] = temp[1]
+
+    def __str__(self):
+
+        result = ''
+        for key in self._table:
+            if key == '':
+                pass
+            elif self._table[key] == '':
+                result = result + str(key+"\n")
+            else:
+                result = result + str(key + ":" + self._table[key] + "\n")
+        return result
+
+    def __len__(self):
+        return len(self._table)
 
     def search(self, chapter):
-        pass
+        try:
+            return self._table[chapter]
+        except KeyError:
+            raise PageNotFoundError
 
 
 class CalendarBook(Book):
     """класс книги - ежедневник с закладкой"""
 
-    bookmark = CalendarBookmark() # присваиваем дескриптор переменной с закаладками
+    bookmark = CalendarBookmark()  # присваиваем дескриптор переменной с закаладками
 
     def __init__(self, title, content=None):
         super(CalendarBook, self).__init__(title, content)
         table_of_contents = 'TABLE OF CONTENT\n'
 
-        #генерируем страницы жедневника на заданный год.
+        # генерируем страницы жедневника на заданный год.
         for month in range(1, 13):
-            #Добавляем календарь на первую страницу для каждого месяца в ежедневнике.
-            self._content.append(Page(str(calendar.TextCalendar(calendar.SUNDAY).formatmonth(int(self.title), month))))
+            # Добавляем календарь на первую страницу для каждого месяца в ежедневнике.
+            self._content.append(Page(str(calendar.TextCalendar(calendar.MONDAY).formatmonth(int(self.title), month))))
             table_of_contents += calendar.month_name[month] + ':' + str(len(self._content)) + '\n'
             for date in calendar.Calendar().itermonthdates(int(self.title), month):
-                #Проверяем соответствует ли номер месяца месяцу для которого нужно создать страницы
+                # Проверяем соответствует ли номер месяца месяцу для которого нужно создать страницы
                 # по дням в ежедневнике
                 if date.month == month:
-                    #создаем страницы дней по датам в ежедневнике
+                    # создаем страницы дней по датам в ежедневнике
                     self._content.append(Page(str(date)))
         self._content.append(table_of_contents)
