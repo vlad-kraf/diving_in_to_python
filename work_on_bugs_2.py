@@ -149,10 +149,7 @@ class Person:
 class Reader:
     def read(self, book, num_page):
         if 0 <= num_page < len(book._content):
-            try:
-                return book._content[num_page]
-            except IndexError:
-                raise PageNotFoundError
+            return book._content[num_page]
         else:
             raise PageNotFoundError
 
@@ -187,7 +184,13 @@ class AdvancedPerson(Person, Reader, Writer):
         pass
 
     def read(self, book, page):
-        pass
+        if type(page) == str:
+            pass
+        if type(page) == int:
+            print(type(page), page)
+            return Reader.read(book, page)
+        else:
+            raise TypeError
 
     def write(self, book, page, text):
         pass
