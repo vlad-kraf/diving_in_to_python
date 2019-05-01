@@ -9,6 +9,8 @@ class TooLongTextError(Exception):
 class PageNotFoundError(Exception):
     pass
 
+class PermissionDeniedError(Exception):
+    pass
 
 class Page:
     """класс страница"""
@@ -117,7 +119,7 @@ class Book(object):
 class CalendarBookmark:
     """класс дескриптор - закладка для ежедневника"""
     def __init__(self, value=0):
-        self.value = int(value)
+        self.value = value
 
     def __get__(self, instance, instance_class):
         return self.value
@@ -146,12 +148,27 @@ class Person:
 
 class Reader:
     def read(self, book, num_page):
-        pass
+        if 0 <= num_page < len(book._content):
+            try:
+                return book._content[num_page]
+            except IndexError:
+                raise PageNotFoundError
+        else:
+            raise PageNotFoundError
 
 
 class Writer:
     def write(self, book, num_page, text):
-        pass
+        if 0 <= num_page < len(book._content):
+            if len(text) >= book.content[num_page].max_sign:
+                raise TooLongTextError
+            else:
+                try:
+                    book.content[num_page] = book.content[num_page] + text
+                except IndexError:
+                    raise PageNotFoundError
+        else:
+            raise PageNotFoundError
 
 
 class AdvancedPerson(Person, Reader, Writer):
@@ -219,6 +236,15 @@ class PageTableContents(Page):
             return self._table[chapter]
         except KeyError:
             raise PageNotFoundError
+
+    def __iadd__(self, other):
+        raise PermissionDeniedError
+
+    def __add__(self, other):
+        raise PermissionDeniedError
+
+    def __radd__(self, other):
+        raise PermissionDeniedError
 
 
 class CalendarBook(Book):
