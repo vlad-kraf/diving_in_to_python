@@ -161,11 +161,11 @@ class Reader:
 class Writer:
     def write(self, book, num_page, text):
         if 0 <= num_page < len(book._content):
-            if len(text) >= book.content[num_page - 1].max_sign:
+            if len(text) >= book._content[num_page - 1].max_sign:
                 raise TooLongTextError
             else:
                 try:
-                    book.content[num_page - 1] = book.content[num_page - 1] + text
+                    book._content[num_page - 1] = book._content[num_page - 1] + text
                 except IndexError:
                     raise PageNotFoundError
         else:
@@ -185,7 +185,15 @@ class AdvancedPerson(Person, Reader, Writer):
         pass
 
     def search(self, book, page):
-        pass
+        key = len(book)
+
+        if type(book[key]) == PageTableContents:
+            try:
+                return book[key].search(page)
+            except KeyError:
+                raise PageNotFoundError
+
+
 
     def read(self, book, page):
         if type(page) == str:
@@ -196,7 +204,12 @@ class AdvancedPerson(Person, Reader, Writer):
             raise TypeError
 
     def write(self, book, page, text):
-        pass
+        if type(page) == str:
+            pass
+        if type(page) == int:
+            return super(AdvancedPerson, self).write(book, page, text)
+        else:
+            raise TypeError
 
 
 class PageTableContents(Page):
@@ -273,4 +286,5 @@ class CalendarBook(Book):
                 if date.month == month:
                     # создаем страницы дней по датам в ежедневнике
                     self._content.append(Page(str(date)))
-        self._content.append(table_of_contents)
+        self._content.append(PageTableContents(table_of_contents))
+
